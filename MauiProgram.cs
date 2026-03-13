@@ -18,47 +18,15 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        // Flatten the SearchBar on each platform
-        Microsoft.Maui.Handlers.SearchBarHandler.Mapper.AppendToMapping("FlatSearchBar", (handler, view) =>
+        // Remove native borders from Entry (used for search fields)
+        Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("BorderlessEntry", (handler, view) =>
         {
 #if IOS || MACCATALYST
-            var searchBar = handler.PlatformView;
-            searchBar.BarTintColor = UIKit.UIColor.Clear;
-            searchBar.BackgroundImage = new UIKit.UIImage();
-            searchBar.SearchBarStyle = UIKit.UISearchBarStyle.Minimal;
-            searchBar.SetSearchFieldBackgroundImage(new UIKit.UIImage(), UIKit.UIControlState.Normal);
-            searchBar.BackgroundColor = UIKit.UIColor.Clear;
-
-            // Strip background from all container subviews
-            foreach (var outerSub in searchBar.Subviews)
-            {
-                outerSub.BackgroundColor = UIKit.UIColor.Clear;
-                foreach (var innerSub in outerSub.Subviews)
-                {
-                    if (innerSub is not UIKit.UITextField)
-                        innerSub.BackgroundColor = UIKit.UIColor.Clear;
-                    innerSub.Layer.ShadowOpacity = 0;
-                }
-            }
-
-            if (searchBar.SearchTextField is { } textField)
-            {
-                textField.BackgroundColor = UIKit.UIColor.FromRGBA(243, 244, 246, 255);
-                textField.Layer.CornerRadius = 10;
-                textField.Layer.MasksToBounds = true;
-                textField.Layer.BorderWidth = 0;
-                textField.Layer.ShadowOpacity = 0;
-                textField.Font = UIKit.UIFont.SystemFontOfSize(15);
-            }
+            handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
+            handler.PlatformView.BackgroundColor = UIKit.UIColor.Clear;
 #elif ANDROID
-            var searchView = handler.PlatformView;
-            int plateId = searchView.Context!.Resources!.GetIdentifier("android:id/search_plate", null, null);
-            if (plateId != 0)
-            {
-                var plate = searchView.FindViewById(plateId);
-                if (plate is not null)
-                    plate.Background = null;
-            }
+            handler.PlatformView.Background = null;
+            handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
 #endif
         });
 

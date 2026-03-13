@@ -9,23 +9,20 @@
 
     <Grid RowDefinitions="Auto,*">
 
-        <Border StrokeShape="RoundRectangle 10"
+        <Border StrokeShape="RoundRectangle 12"
                 StrokeThickness="0"
                 BackgroundColor="{StaticResource SurfaceVariant}"
                 Margin="16,8,16,8"
-                Padding="12,0"
+                Padding="16,0"
                 HeightRequest="44">
-            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-                <Label Text="🔍" FontSize="14" VerticalOptions="Center" Opacity="0.5" />
-                <Entry Text="{Binding SearchText}"
-                       Placeholder="Search speakers..."
-                       PlaceholderColor="{StaticResource TextSecondary}"
-                       TextColor="{StaticResource TextPrimary}"
-                       BackgroundColor="Transparent"
-                       FontSize="15"
-                       VerticalOptions="Center"
-                       HorizontalOptions="Fill" />
-            </HorizontalStackLayout>
+            <Entry Text="{Binding SearchText}"
+                   Placeholder="Search speakers..."
+                   PlaceholderColor="{StaticResource TextSecondary}"
+                   TextColor="{StaticResource TextPrimary}"
+                   BackgroundColor="Transparent"
+                   FontSize="15"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Fill" />
         </Border>
 
         <RefreshView Grid.Row="1"
