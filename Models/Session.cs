@@ -74,6 +74,14 @@ public class Session
     [JsonIgnore]
     public string SpeakerNames =>
         string.Join(", ", SpeakerProfiles.Select(s => s.FullName));
+
+    [JsonIgnore]
+    public string? FirstSpeakerTagLine =>
+        SpeakerProfiles.FirstOrDefault()?.TagLine;
+
+    [JsonIgnore]
+    public string StartTimeDisplay =>
+        StartsAt.HasValue ? $"🕐 {StartsAt.Value:HH:mm}" : string.Empty;
 }
 
 public class QuestionAnswer
