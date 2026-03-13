@@ -5,7 +5,7 @@
              xmlns:models="clr-namespace:MyConference.Models"
              x:Class="MyConference.Views.SpeakerDetailPage"
              x:DataType="viewModels:SpeakerDetailViewModel"
-             Title="{Binding Speaker.FullName}">
+             Title="{Binding Speaker.FullName, FallbackValue='Speaker'}">
 
     <Grid>
         <ScrollView>
@@ -16,21 +16,21 @@
                         WidthRequest="120" HeightRequest="120"
                         StrokeThickness="0"
                         HorizontalOptions="Center">
-                    <Image Source="{Binding Speaker.ProfilePicture}"
+                    <Image Source="{Binding Speaker.ProfilePicture, FallbackValue={x:Null}}"
                            Aspect="AspectFill" />
                 </Border>
 
                 <!-- Name & tagline -->
-                <Label Text="{Binding Speaker.FullName}"
+                <Label Text="{Binding Speaker.FullName, FallbackValue=''}"
                        Style="{StaticResource TitleLabel}"
                        HorizontalTextAlignment="Center" />
 
-                <Label Text="{Binding Speaker.TagLine}"
+                <Label Text="{Binding Speaker.TagLine, FallbackValue=''}"
                        Style="{StaticResource SubtitleLabel}"
                        HorizontalTextAlignment="Center" />
 
                 <!-- Bio -->
-                <Label Text="{Binding Speaker.Bio}"
+                <Label Text="{Binding Speaker.Bio, FallbackValue=''}"
                        LineBreakMode="WordWrap"
                        TextColor="{StaticResource TextPrimary}"
                        FontSize="14"

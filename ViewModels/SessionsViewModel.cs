@@ -171,11 +171,18 @@ public partial class SessionsViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task NavigateToSession(Session session)
+    private void ToggleFavorite(Session? session)
     {
-        await Shell.Current.GoToAsync("sessiondetail", new Dictionary<string, object>
-        {
-            ["SessionId"] = session.Id
-        });
+        if (session is null) return;
+        _favoritesService.ToggleFavorite(session.Id);
+        session.IsFavorite = _favoritesService.IsFavorite(session.Id);
+        FilterSessions();
+    }
+
+    [RelayCommand]
+    private async Task NavigateToSession(Session? session)
+    {
+        if (session is null) return;
+        await Shell.Current.GoToAsync($"sessiondetail?SessionId={session.Id}");
     }
 }

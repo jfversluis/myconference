@@ -76,11 +76,9 @@ public partial class SessionDetailViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task NavigateToSpeaker(Speaker speaker)
+    private async Task NavigateToSpeaker(Speaker? speaker)
     {
-        await Shell.Current.GoToAsync("speakerdetail", new Dictionary<string, object>
-        {
-            ["SpeakerId"] = speaker.Id
-        });
+        if (speaker is null) return;
+        await Shell.Current.GoToAsync($"speakerdetail?SpeakerId={speaker.Id}");
     }
 }

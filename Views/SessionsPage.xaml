@@ -95,19 +95,26 @@
                                     <Label Grid.Column="2"
                                            Style="{StaticResource RoomLabel}"
                                            Text="{Binding RoomName}" />
-                                    <Label Grid.Column="3"
+                                    <Button Grid.Column="3"
                                            Text="♥"
                                            FontSize="20"
-                                           VerticalOptions="Center">
-                                        <Label.Triggers>
-                                            <DataTrigger TargetType="Label" Binding="{Binding IsFavorite}" Value="True">
+                                           BackgroundColor="Transparent"
+                                           BorderWidth="0"
+                                           Padding="8,4"
+                                           MinimumWidthRequest="40"
+                                           MinimumHeightRequest="40"
+                                           VerticalOptions="Center"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:SessionsViewModel}}, Path=ToggleFavoriteCommand}"
+                                           CommandParameter="{Binding}">
+                                        <Button.Triggers>
+                                            <DataTrigger TargetType="Button" Binding="{Binding IsFavorite}" Value="True">
                                                 <Setter Property="TextColor" Value="{StaticResource FavoriteActive}" />
                                             </DataTrigger>
-                                            <DataTrigger TargetType="Label" Binding="{Binding IsFavorite}" Value="False">
+                                            <DataTrigger TargetType="Button" Binding="{Binding IsFavorite}" Value="False">
                                                 <Setter Property="TextColor" Value="{StaticResource FavoriteInactive}" />
                                             </DataTrigger>
-                                        </Label.Triggers>
-                                    </Label>
+                                        </Button.Triggers>
+                                    </Button>
                                 </Grid>
 
                                 <!-- Title -->

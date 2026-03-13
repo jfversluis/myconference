@@ -5,12 +5,12 @@
              xmlns:models="clr-namespace:MyConference.Models"
              x:Class="MyConference.Views.SessionDetailPage"
              x:DataType="viewModels:SessionDetailViewModel"
-             Title="{Binding Session.Title}">
+             Title="Session">
 
     <Shell.TitleView>
         <Grid ColumnDefinitions="*,Auto" Padding="0,0,8,0">
             <Label Grid.Column="0"
-                   Text="{Binding Session.Title}"
+                   Text="{Binding Session.Title, FallbackValue=''}"
                    FontSize="18"
                    FontAttributes="Bold"
                    TextColor="{StaticResource TextOnPrimary}"
@@ -40,19 +40,19 @@
             <VerticalStackLayout Spacing="16" Padding="16,20">
 
                 <!-- Title -->
-                <Label Text="{Binding Session.Title}"
+                <Label Text="{Binding Session.Title, FallbackValue=''}"
                        Style="{StaticResource TitleLabel}" />
 
                 <!-- Time and room -->
                 <HorizontalStackLayout Spacing="8">
-                    <Label Text="{Binding Session.TimeSlot}"
+                    <Label Text="{Binding Session.TimeSlot, FallbackValue=''}"
                            Style="{StaticResource TimeLabel}"
                            FontSize="14"
                            VerticalOptions="Center" />
                     <Label Text="•"
                            VerticalOptions="Center"
                            Opacity="0.5" />
-                    <Label Text="{Binding Session.RoomName}"
+                    <Label Text="{Binding Session.RoomName, FallbackValue=''}"
                            Style="{StaticResource RoomLabel}"
                            FontSize="14"
                            VerticalOptions="Center" />
@@ -64,7 +64,7 @@
                          Margin="0,4" />
 
                 <!-- Description -->
-                <Label Text="{Binding Session.Description}"
+                <Label Text="{Binding Session.Description, FallbackValue=''}"
                        FontSize="15"
                        LineHeight="1.5"
                        TextColor="{StaticResource TextPrimary}" />
@@ -82,7 +82,7 @@
                        TextColor="{StaticResource TextPrimary}" />
 
                 <VerticalStackLayout Spacing="8"
-                                     BindableLayout.ItemsSource="{Binding Session.SpeakerProfiles}">
+                                     BindableLayout.ItemsSource="{Binding Session.SpeakerProfiles, FallbackValue={x:Null}}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="models:Speaker">
                             <Border Style="{StaticResource CardBorder}"
