@@ -151,28 +151,24 @@
 
                                     <!-- Chips + Favorite row -->
                                     <Grid ColumnDefinitions="*,Auto">
-                                        <HorizontalStackLayout Spacing="6">
+                                        <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
                                             <Border StrokeShape="RoundRectangle 5"
                                                     StrokeThickness="0"
                                                     BackgroundColor="{StaticResource PrimaryLight}"
-                                                    Padding="8,3">
-                                                <Label Text="{Binding StartTimeDisplay, FallbackValue=''}"
+                                                    Padding="8,4">
+                                                <Label Text="{Binding TimeSlot}"
                                                        FontSize="11" FontAttributes="Bold"
-                                                       TextColor="{StaticResource PrimaryDark}" />
+                                                       TextColor="{StaticResource PrimaryDark}"
+                                                       VerticalTextAlignment="Center" />
                                             </Border>
                                             <Border StrokeShape="RoundRectangle 5"
                                                     StrokeThickness="0"
                                                     BackgroundColor="{StaticResource SurfaceVariant}"
-                                                    Padding="8,3">
-                                                <Label FontSize="11"
-                                                       TextColor="{StaticResource TextSecondary}">
-                                                    <Label.FormattedText>
-                                                        <FormattedString>
-                                                            <Span Text="📍 " FontSize="10" />
-                                                            <Span Text="{Binding RoomName}" FontSize="11" />
-                                                        </FormattedString>
-                                                    </Label.FormattedText>
-                                                </Label>
+                                                    Padding="8,4">
+                                                <Label Text="{Binding RoomName}"
+                                                       FontSize="11"
+                                                       TextColor="{StaticResource TextSecondary}"
+                                                       VerticalTextAlignment="Center" />
                                             </Border>
                                         </HorizontalStackLayout>
 
