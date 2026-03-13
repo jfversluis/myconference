@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:MyConference.ViewModels"
+             xmlns:models="clr-namespace:MyConference.Models"
+             x:Class="MyConference.Views.SessionDetailPage"
+             x:DataType="viewModels:SessionDetailViewModel"
+             Title="{Binding Session.Title}">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="*,Auto" Padding="0,0,8,0">
+            <Label Grid.Column="0"
+                   Text="{Binding Session.Title}"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource TextOnPrimary}"
+                   LineBreakMode="TailTruncation"
+                   VerticalOptions="Center" />
+            <Button Grid.Column="1"
+                    Style="{StaticResource FavoriteButton}"
+                    Text="♥"
+                    FontSize="22"
+                    Command="{Binding ToggleFavoriteCommand}"
+                    VerticalOptions="Center">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button" Binding="{Binding IsFavorite}" Value="True">
+                        <Setter Property="TextColor" Value="{StaticResource FavoriteActive}" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Button" Binding="{Binding IsFavorite}" Value="False">
+                        <Setter Property="TextColor" Value="{StaticResource TextOnPrimary}" />
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+        </Grid>
+    </Shell.TitleView>
+
+    <Grid>
+        <!-- Content -->
+        <ScrollView IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}">
+            <VerticalStackLayout Spacing="16" Padding="16,20">
+
+                <!-- Title -->
+                <Label Text="{Binding Session.Title}"
+                       Style="{StaticResource TitleLabel}" />
+
+                <!-- Time and room -->
+                <HorizontalStackLayout Spacing="8">
+                    <Label Text="{Binding Session.TimeSlot}"
+                           Style="{StaticResource TimeLabel}"
+                           FontSize="14"
+                           VerticalOptions="Center" />
+                    <Label Text="•"
+                           VerticalOptions="Center"
+                           Opacity="0.5" />
+                    <Label Text="{Binding Session.RoomName}"
+                           Style="{StaticResource RoomLabel}"
+                           FontSize="14"
+                           VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <!-- Divider -->
+                <BoxView HeightRequest="1"
+                         Color="{StaticResource Divider}"
+                         Margin="0,4" />
+
+                <!-- Description -->
+                <Label Text="{Binding Session.Description}"
+                       FontSize="15"
+                       LineHeight="1.5"
+                       TextColor="{StaticResource TextPrimary}" />
+
+                <!-- Divider -->
+                <BoxView HeightRequest="1"
+                         Color="{StaticResource Divider}"
+                         Margin="0,4" />
+
+                <!-- Speakers section -->
+                <Label Text="Speakers"
+                       Style="{StaticResource SubtitleLabel}"
+                       FontAttributes="Bold"
+                       FontSize="18"
+                       TextColor="{StaticResource TextPrimary}" />
+
+                <VerticalStackLayout Spacing="8"
+                                     BindableLayout.ItemsSource="{Binding Session.SpeakerProfiles}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:Speaker">
+                            <Border Style="{StaticResource CardBorder}"
+                                    Padding="12">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:SessionDetailViewModel}}, Path=NavigateToSpeakerCommand}"
+                                        CommandParameter="{Binding}" />
+                                </Border.GestureRecognizers>
+
+                                <HorizontalStackLayout Spacing="12">
+                                    <Border StrokeShape="RoundRectangle 24"
+                                            StrokeThickness="2"
+                                            Stroke="{StaticResource Divider}"
+                                            WidthRequest="48"
+                                            HeightRequest="48">
+                                        <Image Source="{Binding ProfilePicture}"
+                                               Aspect="AspectFill" />
+                                    </Border>
+
+                                    <VerticalStackLayout VerticalOptions="Center" Spacing="2">
+                                        <Label Text="{Binding FullName}"
+                                               Style="{StaticResource CardTitleLabel}" />
+                                        <Label Text="{Binding TagLine}"
+                                               Style="{StaticResource CardSubtitleLabel}"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="2" />
+                                    </VerticalStackLayout>
+                                </HorizontalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Loading indicator -->
+        <ActivityIndicator IsRunning="{Binding IsLoading}"
+                           IsVisible="{Binding IsLoading}"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+    </Grid>
+
+</ContentPage>

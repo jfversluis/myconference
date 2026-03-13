@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:MyConference.ViewModels"
+             xmlns:models="clr-namespace:MyConference.Models"
+             x:Class="MyConference.Views.SessionsPage"
+             x:DataType="viewModels:SessionsViewModel"
+             Title="Sessions">
+
+    <Grid>
+        <!-- Main content -->
+        <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                     Command="{Binding RefreshCommand}">
+            <CollectionView ItemsSource="{Binding SessionGroups}"
+                            IsGrouped="True"
+                            SelectionMode="None">
+
+                <CollectionView.Header>
+                    <VerticalStackLayout Spacing="0">
+                        <!-- Search bar -->
+                        <SearchBar Text="{Binding SearchText}"
+                                   Placeholder="Search sessions or speakers..."
+                                   Margin="16,8" />
+
+                        <!-- Offline banner -->
+                        <Border IsVisible="{Binding IsOffline}"
+                                BackgroundColor="{StaticResource Accent}"
+                                Padding="8,4" Margin="0">
+                            <HorizontalStackLayout HorizontalOptions="Center" Spacing="8">
+                                <Label Text="📡" FontSize="14" VerticalOptions="Center" />
+                                <Label Text="Offline mode — showing cached data" FontSize="12"
+                                       TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <!-- Day selector chips -->
+                        <ScrollView Orientation="Horizontal"
+                                    HorizontalScrollBarVisibility="Never"
+                                    IsVisible="{Binding IsMultiDay}">
+                            <HorizontalStackLayout Spacing="8"
+                                                   Padding="16,4,16,8"
+                                                   BindableLayout.ItemsSource="{Binding Days}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String">
+                                        <Border StrokeShape="RoundRectangle 16"
+                                                Padding="14,6"
+                                                StrokeThickness="0"
+                                                BackgroundColor="{StaticResource SurfaceVariant}">
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:SessionsViewModel}}, Path=SelectDayCommand}"
+                                                    CommandParameter="{Binding}" />
+                                            </Border.GestureRecognizers>
+                                            <Label Text="{Binding}"
+                                                   FontSize="13"
+                                                   HorizontalTextAlignment="Center"
+                                                   TextColor="{StaticResource TextSecondary}" />
+                                        </Border>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </HorizontalStackLayout>
+                        </ScrollView>
+                    </VerticalStackLayout>
+                </CollectionView.Header>
+
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate x:DataType="models:TimeSlotGroup">
+                        <Label Text="{Binding TimeSlot}"
+                               Style="{StaticResource TimeLabel}"
+                               FontSize="14"
+                               Padding="16,16,16,4" />
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Session">
+                        <Border Style="{StaticResource CardBorder}" Margin="16,4">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:SessionsViewModel}}, Path=NavigateToSessionCommand}"
+                                    CommandParameter="{Binding}" />
+                            </Border.GestureRecognizers>
+
+                            <VerticalStackLayout Spacing="6" Padding="14,10">
+                                <!-- Top row: time, room, favorite -->
+                                <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+                                    <Label Grid.Column="0"
+                                           Style="{StaticResource TimeLabel}"
+                                           Text="{Binding TimeSlot}" />
+                                    <Label Grid.Column="1"
+                                           Text="•"
+                                           Margin="6,0"
+                                           VerticalOptions="Center"
+                                           Opacity="0.5" />
+                                    <Label Grid.Column="2"
+                                           Style="{StaticResource RoomLabel}"
+                                           Text="{Binding RoomName}" />
+                                    <Label Grid.Column="3"
+                                           Text="♥"
+                                           FontSize="20"
+                                           VerticalOptions="Center">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsFavorite}" Value="True">
+                                                <Setter Property="TextColor" Value="{StaticResource FavoriteActive}" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsFavorite}" Value="False">
+                                                <Setter Property="TextColor" Value="{StaticResource FavoriteInactive}" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </Grid>
+
+                                <!-- Title -->
+                                <Label Style="{StaticResource CardTitleLabel}"
+                                       Text="{Binding Title}" />
+
+                                <!-- Speakers row -->
+                                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                    <HorizontalStackLayout BindableLayout.ItemsSource="{Binding SpeakerProfiles}">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate x:DataType="models:Speaker">
+                                                <Border StrokeShape="RoundRectangle 14"
+                                                        StrokeThickness="2"
+                                                        Stroke="{StaticResource Surface}"
+                                                        WidthRequest="28"
+                                                        HeightRequest="28"
+                                                        Margin="-6,0,0,0">
+                                                    <Image Source="{Binding ProfilePicture}"
+                                                           Aspect="AspectFill" />
+                                                </Border>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </HorizontalStackLayout>
+
+                                    <Label VerticalOptions="Center"
+                                           FontSize="13"
+                                           Opacity="0.7"
+                                           LineBreakMode="TailTruncation"
+                                           Text="{Binding SpeakerNames}" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout VerticalOptions="Center"
+                                         HorizontalOptions="Center"
+                                         Padding="32">
+                        <Label Text="No sessions found"
+                               Style="{StaticResource SubtitleLabel}"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+            </CollectionView>
+        </RefreshView>
+
+        <!-- Loading indicator -->
+        <ActivityIndicator IsRunning="{Binding IsLoading}"
+                           IsVisible="{Binding IsLoading}"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+    </Grid>
+
+</ContentPage>
