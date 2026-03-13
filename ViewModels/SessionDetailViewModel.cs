@@ -76,6 +76,12 @@ public partial class SessionDetailViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async Task GoBack()
+    {
+        await Shell.Current.GoToAsync("..");
+    }
+
+    [RelayCommand]
     private async Task NavigateToSpeaker(Speaker? speaker)
     {
         if (speaker is null) return;
