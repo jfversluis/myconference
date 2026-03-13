@@ -80,87 +80,92 @@
 
                 <CollectionView.GroupHeaderTemplate>
                     <DataTemplate x:DataType="models:TimeSlotGroup">
-                        <Label Text="{Binding TimeSlot}"
-                               Style="{StaticResource TimeLabel}"
-                               FontSize="14"
-                               Padding="16,16,16,4" />
+                        <VerticalStackLayout Padding="20,20,20,8">
+                            <HorizontalStackLayout Spacing="8">
+                                <Border StrokeShape="RoundRectangle 6" StrokeThickness="0"
+                                        BackgroundColor="{StaticResource PrimaryLight}" Padding="8,4">
+                                    <Label Text="{Binding TimeSlot}"
+                                           FontSize="13" FontAttributes="Bold"
+                                           TextColor="{StaticResource PrimaryDark}" />
+                                </Border>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
                     </DataTemplate>
                 </CollectionView.GroupHeaderTemplate>
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Session">
-                        <Border Style="{StaticResource CardBorder}" Margin="16,4">
+                        <Border Style="{StaticResource CardBorder}" Margin="16,5" Padding="0">
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:SessionsViewModel}}, Path=NavigateToSessionCommand}"
                                     CommandParameter="{Binding}" />
                             </Border.GestureRecognizers>
 
-                            <VerticalStackLayout Spacing="6" Padding="14,10">
-                                <!-- Top row: time, room, favorite -->
-                                <Grid ColumnDefinitions="Auto,Auto,*,Auto">
-                                    <Label Grid.Column="0"
-                                           Style="{StaticResource TimeLabel}"
-                                           Text="{Binding TimeSlot}" />
-                                    <Label Grid.Column="1"
-                                           Text="•"
-                                           Margin="6,0"
-                                           VerticalOptions="Center"
-                                           Opacity="0.5" />
-                                    <Label Grid.Column="2"
-                                           Style="{StaticResource RoomLabel}"
-                                           Text="{Binding RoomName}" />
-                                    <Button Grid.Column="3"
-                                           Text="♥"
-                                           FontSize="20"
-                                           BackgroundColor="Transparent"
-                                           BorderWidth="0"
-                                           Padding="8,4"
-                                           MinimumWidthRequest="40"
-                                           MinimumHeightRequest="40"
-                                           VerticalOptions="Center"
-                                           Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:SessionsViewModel}}, Path=ToggleFavoriteCommand}"
-                                           CommandParameter="{Binding}">
-                                        <Button.Triggers>
-                                            <DataTrigger TargetType="Button" Binding="{Binding IsFavorite}" Value="True">
-                                                <Setter Property="TextColor" Value="{StaticResource FavoriteActive}" />
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="Button" Binding="{Binding IsFavorite}" Value="False">
-                                                <Setter Property="TextColor" Value="{StaticResource FavoriteInactive}" />
-                                            </DataTrigger>
-                                        </Button.Triggers>
-                                    </Button>
-                                </Grid>
+                            <Grid ColumnDefinitions="*,Auto" Padding="16,14">
+                                <!-- Main content -->
+                                <VerticalStackLayout Spacing="10">
+                                    <!-- Title -->
+                                    <Label Text="{Binding Title}"
+                                           FontSize="16" FontAttributes="Bold"
+                                           TextColor="{StaticResource TextPrimary}"
+                                           LineBreakMode="WordWrap" />
 
-                                <!-- Title -->
-                                <Label Style="{StaticResource CardTitleLabel}"
-                                       Text="{Binding Title}" />
-
-                                <!-- Speakers row -->
-                                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
-                                    <HorizontalStackLayout BindableLayout.ItemsSource="{Binding SpeakerProfiles}">
-                                        <BindableLayout.ItemTemplate>
-                                            <DataTemplate x:DataType="models:Speaker">
-                                                <Border StrokeShape="RoundRectangle 14"
-                                                        StrokeThickness="2"
-                                                        Stroke="{StaticResource Surface}"
-                                                        WidthRequest="28"
-                                                        HeightRequest="28"
-                                                        Margin="-6,0,0,0">
-                                                    <Image Source="{Binding ProfilePicture}"
-                                                           Aspect="AspectFill" />
-                                                </Border>
-                                            </DataTemplate>
-                                        </BindableLayout.ItemTemplate>
+                                    <!-- Room chip -->
+                                    <HorizontalStackLayout Spacing="6">
+                                        <Label Text="📍" FontSize="11" VerticalOptions="Center" />
+                                        <Label Text="{Binding RoomName}"
+                                               FontSize="12"
+                                               TextColor="{StaticResource TextSecondary}"
+                                               VerticalOptions="Center" />
                                     </HorizontalStackLayout>
 
-                                    <Label VerticalOptions="Center"
-                                           FontSize="13"
-                                           Opacity="0.7"
-                                           LineBreakMode="TailTruncation"
-                                           Text="{Binding SpeakerNames}" />
-                                </HorizontalStackLayout>
-                            </VerticalStackLayout>
+                                    <!-- Speakers row -->
+                                    <HorizontalStackLayout Spacing="8" Margin="0,2,0,0">
+                                        <HorizontalStackLayout BindableLayout.ItemsSource="{Binding SpeakerProfiles}">
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate x:DataType="models:Speaker">
+                                                    <Border StrokeShape="RoundRectangle 16"
+                                                            StrokeThickness="2"
+                                                            Stroke="{StaticResource Surface}"
+                                                            WidthRequest="32"
+                                                            HeightRequest="32"
+                                                            Margin="-6,0,0,0">
+                                                        <Image Source="{Binding ProfilePicture}"
+                                                               Aspect="AspectFill" />
+                                                    </Border>
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </HorizontalStackLayout>
+
+                                        <Label VerticalOptions="Center"
+                                               FontSize="13"
+                                               TextColor="{StaticResource TextSecondary}"
+                                               LineBreakMode="TailTruncation"
+                                               Text="{Binding SpeakerNames}" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+
+                                <!-- Favorite heart -->
+                                <Button Grid.Column="1"
+                                        Text="♥" FontSize="18"
+                                        BackgroundColor="Transparent"
+                                        BorderWidth="0" Padding="4"
+                                        MinimumWidthRequest="32"
+                                        MinimumHeightRequest="32"
+                                        VerticalOptions="Start"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:SessionsViewModel}}, Path=ToggleFavoriteCommand}"
+                                        CommandParameter="{Binding}">
+                                    <Button.Triggers>
+                                        <DataTrigger TargetType="Button" Binding="{Binding IsFavorite}" Value="True">
+                                            <Setter Property="TextColor" Value="{StaticResource FavoriteActive}" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Button" Binding="{Binding IsFavorite}" Value="False">
+                                            <Setter Property="TextColor" Value="{StaticResource FavoriteInactive}" />
+                                        </DataTrigger>
+                                    </Button.Triggers>
+                                </Button>
+                            </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
