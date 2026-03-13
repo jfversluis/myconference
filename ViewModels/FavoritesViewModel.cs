@@ -70,6 +70,6 @@ public partial class FavoritesViewModel : ObservableObject
     [RelayCommand]
     private async Task NavigateToSession(Session session)
     {
-        await Shell.Current.GoToAsync("sessions/detail", new Dictionary<string, object> { ["SessionId"] = session.Id });
+        await Shell.Current.GoToAsync("sessiondetail", new Dictionary<string, object> { ["SessionId"] = session.Id });
     }
 }

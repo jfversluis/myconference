@@ -77,7 +77,7 @@ public partial class SpeakersViewModel : ObservableObject
     [RelayCommand]
     private async Task NavigateToSpeaker(Speaker speaker)
     {
-        await Shell.Current.GoToAsync("speakers/detail", new Dictionary<string, object>
+        await Shell.Current.GoToAsync("speakerdetail", new Dictionary<string, object>
         {
             ["SpeakerId"] = speaker.Id
         });
